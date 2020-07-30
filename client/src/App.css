@@ -3,15 +3,16 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  animation: App-logo-spin infinite 10s linear;
+  height: 90px;
 }
 
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 125px;
   padding: 20px;
   color: white;
+  font-family: monospace;
 }
 
 .App-title {
@@ -25,4 +26,15 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+thead {color:black;}
+tbody {color:black;}
+tfoot {color:red;}
+
+table, th, td {
+  border: .5px solid black;
+}
+td, th{
+  padding: 1px;
 }
