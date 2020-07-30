@@ -1,31 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './pizza.png';
 import './App.css';
+import Table from './table.js';
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { apiResponse: "" };
+        this.state = {  apiResponse: "",
+                        tableData:[
+                            {'fruit': 'Apple', 'cost': 100},
+                            {'fruit': 'Orange', 'cost': 50},
+                            {'fruit': 'Banana', 'cost': 35}
+                        ]
+                      };
     }
     
-    callAPI(location) {
-        var myHeaders = new Headers();
-        myHeaders.append("Access-Control-Allow-Origin", "*");
+    callPizzaApi() {          
+        fetch("http://localhost:9000/pizza")
+            .then(res => res.text())
+            .then(res => this.formatNicely(res))
+            .then(res => this.setState({ apiResponse: res }))
+            .catch(err => err);
+    }
+    
+    componentDidMount() {
+        this.callPizzaApi();
+    }
 
-        var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-        };
-          
-        fetch(`https://www.dominos.co.uk/storefindermap/storesearch?SearchText=${location}`, requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-    }
-    
-    componentWillMount() {
-        this.callAPI('birmingham');
+    formatNicely(result)
+    {
+        let x = JSON.parse(result);
+        this.setState({ tableData: x["collectionStores"] })
     }
 
     render(){
@@ -33,8 +38,12 @@ class App extends Component {
             <div className="App">
                 <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
-                    <h1 className="App-title">Welcome to Pizza Finder</h1>
+                    <h1 className="App-title">Can I Haz Pizza?</h1>
                 </header>
+                <div>
+                    <Table data={this.state.tableData}/>
+                </div>
+
                 <p className="App-intro">{this.state.apiResponse}</p>
             </div>
         );
