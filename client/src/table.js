@@ -1,52 +1,44 @@
 import React from 'react';
 
-export default class Table extends React.Component {
-    
-    constructor(props){
-      super(props);
-      this.getHeader = this.getHeader.bind(this);
-      this.getRowsData = this.getRowsData.bind(this);
-      this.getKeys = this.getKeys.bind(this);
+export const Table = (props) => {
+    function getKeys(){
+      if (!props.data?.length) {
+        return [];
+      }
+      return Object.keys(props.data[0]);
     }
     
-    getKeys = function(){
-      return Object.keys(this.props.data[0]);
-    }
-    
-    getHeader = function(){
-      var keys = this.getKeys();
+    function getHeader(){
+      var keys = getKeys();
       return keys.map((key, index)=>{
-        return <th key={key}>{key.toUpperCase()}</th>
+        return <th key={index}>{key.toUpperCase()}</th>
       })
     }
     
-    getRowsData = function(){
-      var items = this.props.data;
-      var keys = this.getKeys();
+    function getRowsData(){
+      var items = props.data;
+      var keys = getKeys();
       return items.map((row, index)=>{
-        return <tr key={index}><RenderRow key={index} data={row} keys={keys}/></tr>
+        return <tr key={index}><RenderRow data={row} keys={keys}/></tr>
       })
     }
     
-    render() {
-        return (
-          <div>
-            <table>
-            <thead>
-              <tr>{this.getHeader()}</tr>
-            </thead>
-            <tbody>
-              {this.getRowsData()}
-            </tbody>
-            </table>
-          </div>
-          
-        );
-    }
+    return (
+      <div>
+        <table>
+        <thead>
+          <tr>{getHeader()}</tr>
+        </thead>
+        <tbody>
+          {getRowsData()}
+        </tbody>
+        </table>
+      </div>
+    );
 }
 
 const RenderRow = (props) =>{
   return props.keys.map((key, index)=>{
-    return <td key={props.data[key]}>{props.data[key]}</td>
+    return <td key={index}>{props.data[key]}</td>
   })
 }

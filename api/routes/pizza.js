@@ -4,18 +4,19 @@ const axios = require('axios');
 
 router.get('/', async function(req, res, next) {
     let location = req.query.location;
-    let details = await getPizza(location);    
+    let details = await getPizza(location);
     res.send(details);
 });
 
 async function getPizza(location) {
     try {
-        const response = await axios.get(`https://www.dominos.co.uk/storefindermap/storesearch?SearchText=${location}}`);
+        const query = new URLSearchParams();
+        query.set('SearchText', location);
+        let response = await axios.get(`https://www.dominos.co.uk/storefindermap/storesearch?${query.toString()}`);
         let pizza = JSON.stringify(response.data);
-        console.log(pizza);
         return pizza;
     } catch (error) {
-        console.error(error);
+        console.error('Error getting pizza', error);
     }
 }
 
